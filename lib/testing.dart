@@ -139,6 +139,13 @@ class _TestingState extends State<Testing> {
             },
             child: const Text("Delete Body Fat Log"),
           ),
+          ElevatedButton(
+            onPressed: () async {
+              FitbitAPIs fitbitAPIs = FitbitAPIs();
+              fitbitAPIs.getFriends(accessToken, clientId);
+            },
+            child: const Text("Get Friends"),
+          ),
         ],
       ),
     );
