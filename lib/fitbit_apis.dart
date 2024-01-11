@@ -586,7 +586,7 @@ class FitbitAPIs {
   Future addFavoriteFoods(
       String accessToken, String userId, String foodId) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/favorite/${foodId}.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/favorite/$foodId.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
