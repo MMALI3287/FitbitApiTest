@@ -1,0 +1,90 @@
+{
+  "food": {
+    "accessLevel": "PUBLIC",
+    "brand": "Del Monte",
+    "calories": 60,
+    "defaultServingSize": 0.5,
+    "defaultUnit": {
+      "id": 91,
+      "name": "cup",
+      "plural": "cups"
+    },
+    "foodId": 123,
+    "isGeneric": false,
+    "locale": "en_US",
+    "name": "Apricot Halves, Unpeeled In Extra Light Syrup",
+    "servings": [
+      {
+        "multiplier": 1,
+        "servingSize": 0.5,
+        "unit": {
+          "id": 91,
+          "name": "cup",
+          "plural": "cups"
+        },
+        "unitId": 91
+      },
+      {
+        "multiplier": 4,
+        "servingSize": 1,
+        "unit": {
+          "id": 256,
+          "name": "pint",
+          "plural": "pints"
+        },
+        "unitId": 256
+      },
+      {
+        "multiplier": 8,
+        "servingSize": 1,
+        "unit": {
+          "id": 279,
+          "name": "quart",
+          "plural": "quarts"
+        },
+        "unitId": 279
+      },
+      {
+        "multiplier": 0.23237314820289612,
+        "servingSize": 1,
+        "unit": {
+          "id": 226,
+          "name": "oz",
+          "plural": "oz"
+        },
+        "unitId": 226
+      },
+      {
+        "multiplier": 3.717970371246338,
+        "servingSize": 1,
+        "unit": {
+          "id": 180,
+          "name": "lb",
+          "plural": "lbs"
+        },
+        "unitId": 180
+      },
+      {
+        "multiplier": 1,
+        "servingSize": 122,
+        "unit": {
+          "id": 147,
+          "name": "gram",
+          "plural": "grams"
+        },
+        "unitId": 147
+      },
+      {
+        "multiplier": 8.196721076965332,
+        "servingSize": 1,
+        "unit": {
+          "id": 389,
+          "name": "kg",
+          "plural": "kg"
+        },
+        "unitId": 389
+      }
+    ],
+    "units": [91, 256, 279, 226, 180, 147, 389]
+  }
+}

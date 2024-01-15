@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:fb_api_test/fitbit_credententials.dart';
+import 'package:fb_api_test/testing.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:intl/intl.dart';
 import 'package:fb_api_test/fitbit_strings.dart';
@@ -582,11 +583,308 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  ///-------------------------- Activity API ----------------------///
-  Future addFavoriteFoods(
-      String accessToken, String userId, String foodId) async {
+  ///-------------------------- Nutrition API ----------------------///
+  Future addFavoriteFoods(String accessToken, String userId, int foodId) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/favorite/${foodId}.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/favorite/$foodId.json";
+    print(path);
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    try {
+      Response response = await _dio.post(
+        path,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {}
+  }
+
+  Future createFood(
+      String accessToken,
+      String userId,
+      String name,
+      int defaultFoodMeasurementUnitId,
+      int defaultServingSize,
+      int calories,
+      String formType,
+      String description) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods.json";
+    Map<String, dynamic> queryParameter = {
+      "name": name,
+      "defaultFoodMeasurementUnitId": defaultFoodMeasurementUnitId,
+      "defaultServingSize": defaultServingSize,
+      "calories": calories,
+      "formType": formType,
+      "description": description,
+    };
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    try {
+      Response response = await _dio.post(
+        path,
+        queryParameters: queryParameter,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {}
+  }
+
+  Future createFoodGoal(
+      String accessToken, String userId, String intensity) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/goal.json";
+
+    Map<String, dynamic> queryParameter = {
+      "intensity": intensity,
+    };
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    try {
+      Response response = await _dio.post(
+        path,
+        queryParameters: queryParameter,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {
+      print("Error while creating food goal: $e");
+    }
+  }
+
+  Future createFoodLog(
+      String accessToken,
+      String userId,
+      int foodId,
+      int mealTypeId,
+      int unitId,
+      int amount,
+      DateTime dateTime,
+      bool favorite,
+      String brandName,
+      int calories) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log.json";
+    String date = DateFormat('yyyy-MM-dd').format(dateTime);
+
+    Map<String, dynamic> queryParameters = {
+      "foodId": foodId,
+      "mealTypeId": mealTypeId,
+      "unitId": unitId,
+      "amount": amount,
+      "date": date,
+      "favorite": favorite,
+      "brandName": brandName,
+      "calories": calories
+    };
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+    try {
+      Response response = await _dio.post(
+        path,
+        queryParameters: queryParameters,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future createMeal(String accessToken, String userId, String name,
+      String description, List<Map<String, dynamic>> mealFoods) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/meals.json";
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    print(path);
+
+    Map<String, dynamic> queryParameter = {
+      "name": name,
+      "description": description,
+      "mealFoods": mealFoods
+    };
+
+    print(queryParameter);
+
+    try {
+      Response response = await _dio.post(
+        path,
+        queryParameters: queryParameter,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future createWaterGoal(String accessToken, String userId, int target) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/water/goal.json";
+    Map<String, dynamic> queryParameter = {
+      "target": target,
+    };
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    try {
+      Response response = await _dio.post(
+        path,
+        queryParameters: queryParameter,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {}
+  }
+
+  Future createWaterLog(String accessToken, String userId, int amount,
+      DateTime dateTime, String unit) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/water.json";
+    String date = DateFormat('yyyy-MM-dd').format(dateTime);
+
+    Map<String, dynamic> queryParameter = {
+      "amount": amount,
+      "date": date,
+      "unit": unit
+    };
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    try {
+      Response response = await _dio.post(
+        path,
+        queryParameters: queryParameter,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {}
+  }
+
+  Future deleteCustomFood(String accessToken, String userId, int foodId) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/$foodId.json";
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    try {
+      Response response = await _dio.delete(
+        path,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {}
+  }
+
+  Future deleteFavoriteFoods(
+      String accessToken, String userId, int foodId) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/favorite/$foodId.json";
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    try {
+      Response response = await _dio.delete(
+        path,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {}
+  }
+
+  Future deleteFoodLog(String accessToken, String userId, int foodLogId) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/$foodLogId.json";
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    try {
+      Response response = await _dio.delete(
+        path,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {}
+  }
+
+  Future deleteMeal(String accessToken, String userId, int mealId) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/meals/$mealId.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -606,235 +904,16 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  Future createFood(String accessToken, String userId) async {
+  Future deleteWaterLog(
+      String accessToken, String userId, int waterLogId) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/water/$waterLogId.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
 
     try {
-      Response response = await _dio.get(
-        path,
-        options: Options(
-          contentType: Headers.jsonContentType,
-          headers: bearerHeader,
-        ),
-      );
-
-      if (response.data != null) {
-        print(response.data.toString());
-      }
-    } catch (e) {}
-  }
-
-  Future createFoodGoal(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
-    Map<String, dynamic> bearerHeader = {
-      "Authorization": "Bearer $accessToken"
-    };
-
-    try {
-      Response response = await _dio.get(
-        path,
-        options: Options(
-          contentType: Headers.jsonContentType,
-          headers: bearerHeader,
-        ),
-      );
-
-      if (response.data != null) {
-        print(response.data.toString());
-      }
-    } catch (e) {}
-  }
-
-  Future CreateFoodLog(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
-    Map<String, dynamic> bearerHeader = {
-      "Authorization": "Bearer $accessToken"
-    };
-
-    try {
-      Response response = await _dio.get(
-        path,
-        options: Options(
-          contentType: Headers.jsonContentType,
-          headers: bearerHeader,
-        ),
-      );
-
-      if (response.data != null) {
-        print(response.data.toString());
-      }
-    } catch (e) {}
-  }
-
-  Future createMeal(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
-    Map<String, dynamic> bearerHeader = {
-      "Authorization": "Bearer $accessToken"
-    };
-
-    try {
-      Response response = await _dio.get(
-        path,
-        options: Options(
-          contentType: Headers.jsonContentType,
-          headers: bearerHeader,
-        ),
-      );
-
-      if (response.data != null) {
-        print(response.data.toString());
-      }
-    } catch (e) {}
-  }
-
-  Future createWaterGoal(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
-    Map<String, dynamic> bearerHeader = {
-      "Authorization": "Bearer $accessToken"
-    };
-
-    try {
-      Response response = await _dio.get(
-        path,
-        options: Options(
-          contentType: Headers.jsonContentType,
-          headers: bearerHeader,
-        ),
-      );
-
-      if (response.data != null) {
-        print(response.data.toString());
-      }
-    } catch (e) {}
-  }
-
-  Future createWaterLog(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
-    Map<String, dynamic> bearerHeader = {
-      "Authorization": "Bearer $accessToken"
-    };
-
-    try {
-      Response response = await _dio.get(
-        path,
-        options: Options(
-          contentType: Headers.jsonContentType,
-          headers: bearerHeader,
-        ),
-      );
-
-      if (response.data != null) {
-        print(response.data.toString());
-      }
-    } catch (e) {}
-  }
-
-  Future deleteCustomFood(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
-    Map<String, dynamic> bearerHeader = {
-      "Authorization": "Bearer $accessToken"
-    };
-
-    try {
-      Response response = await _dio.get(
-        path,
-        options: Options(
-          contentType: Headers.jsonContentType,
-          headers: bearerHeader,
-        ),
-      );
-
-      if (response.data != null) {
-        print(response.data.toString());
-      }
-    } catch (e) {}
-  }
-
-  Future deleteFavoriteFoods(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
-    Map<String, dynamic> bearerHeader = {
-      "Authorization": "Bearer $accessToken"
-    };
-
-    try {
-      Response response = await _dio.get(
-        path,
-        options: Options(
-          contentType: Headers.jsonContentType,
-          headers: bearerHeader,
-        ),
-      );
-
-      if (response.data != null) {
-        print(response.data.toString());
-      }
-    } catch (e) {}
-  }
-
-  Future deleteFoodLog(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
-    Map<String, dynamic> bearerHeader = {
-      "Authorization": "Bearer $accessToken"
-    };
-
-    try {
-      Response response = await _dio.get(
-        path,
-        options: Options(
-          contentType: Headers.jsonContentType,
-          headers: bearerHeader,
-        ),
-      );
-
-      if (response.data != null) {
-        print(response.data.toString());
-      }
-    } catch (e) {}
-  }
-
-  Future deleteMeal(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
-    Map<String, dynamic> bearerHeader = {
-      "Authorization": "Bearer $accessToken"
-    };
-
-    try {
-      Response response = await _dio.get(
-        path,
-        options: Options(
-          contentType: Headers.jsonContentType,
-          headers: bearerHeader,
-        ),
-      );
-
-      if (response.data != null) {
-        print(response.data.toString());
-      }
-    } catch (e) {}
-  }
-
-  Future deleteWaterLog(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
-    Map<String, dynamic> bearerHeader = {
-      "Authorization": "Bearer $accessToken"
-    };
-
-    try {
-      Response response = await _dio.get(
+      Response response = await _dio.delete(
         path,
         options: Options(
           contentType: Headers.jsonContentType,
@@ -850,7 +929,7 @@ class FitbitAPIs {
 
   Future getFavoriteFoods(String accessToken, String userId) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/favorite.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -870,9 +949,8 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  Future getFood(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+  Future getFood(String accessToken, String userId, int foodId) async {
+    String path = "${FitbitStrings.apiBaseUrl}/1/foods/$foodId.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -894,7 +972,7 @@ class FitbitAPIs {
 
   Future getFoodGoals(String accessToken, String userId) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/goal.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -915,8 +993,7 @@ class FitbitAPIs {
   }
 
   Future getFoodLocales(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+    String path = "${FitbitStrings.apiBaseUrl}/1/foods/locales.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -936,9 +1013,11 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  Future getFoodLog(String accessToken, String userId) async {
+  Future getFoodLog(
+      String accessToken, String userId, DateTime dateTime) async {
+    String date = DateFormat('yyyy-MM-dd').format(dateTime);
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/date/$date.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -959,8 +1038,7 @@ class FitbitAPIs {
   }
 
   Future getFoodUnits(String accessToken, String userId) async {
-    String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+    String path = "${FitbitStrings.apiBaseUrl}/1/foods/units.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -982,7 +1060,7 @@ class FitbitAPIs {
 
   Future getFrequentFoods(String accessToken, String userId) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/frequent.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -1002,9 +1080,9 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  Future getmeal(String accessToken, String userId) async {
+  Future getMeal(String accessToken, String userId, int mealId) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/meals/$mealId.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -1024,9 +1102,9 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  Future getmeals(String accessToken, String userId) async {
+  Future getMeals(String accessToken, String userId) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/meals.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -1048,7 +1126,7 @@ class FitbitAPIs {
 
   Future getRecentFoods(String accessToken, String userId) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/recent.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -1070,7 +1148,7 @@ class FitbitAPIs {
 
   Future getWaterGoal(String accessToken, String userId) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods//log/water/goal.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -1090,9 +1168,11 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  Future getWaterLog(String accessToken, String userId) async {
+  Future getWaterLog(
+      String accessToken, String userId, DateTime dateTime) async {
+    String date = DateFormat('yyyy-MM-dd').format(dateTime);
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/water/date/$date.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -1112,9 +1192,9 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  Future searchFoods(String accessToken, String userId) async {
+  Future searchFoods(String accessToken, String userId, String foodName) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/foods/search.json?query=$foodName";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -1134,9 +1214,40 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  Future updateFoodLog(String accessToken, String userId) async {
+  Future updateFoodLog(String accessToken, String userId, int foodLogId,
+      int mealTypeId, int amount, int unitId, int calories) async {
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/$foodLogId.json";
+    Map<String, dynamic> queryParameter = {
+      "mealTypeId": mealTypeId,
+      "amount": amount,
+      "unitId": unitId,
+      "calories": calories
+    };
+
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    try {
+      Response response = await _dio.post(
+        path,
+        queryParameters: queryParameter,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {}
+  }
+
+  Future updateMeal(String accessToken, String userId, int mealId) async {
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/meals/$mealId.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
@@ -1156,12 +1267,46 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  Future updateMeal(String accessToken, String userId) async {
+  Future updateWaterLog(String accessToken, String userId, int waterLogId,
+      DateTime dateTime, int amount, String unit) async {
+    String date = DateFormat('yyyy-MM-dd').format(dateTime);
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/water/$waterLogId.json";
+    Map<String, dynamic> queryParameter = {
+      "date": date,
+      "amount": amount,
+      "unit": unit
+    };
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
+
+    try {
+      Response response = await _dio.post(
+        path,
+        queryParameters: queryParameter,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: bearerHeader,
+        ),
+      );
+
+      if (response.data != null) {
+        print(response.data.toString());
+      }
+    } catch (e) {}
+  }
+
+  Future getNutritionTimeSeriesByDate(String accessToken, String userId,
+      String resource, DateTime dateTime, Period period) async {
+    String date = DateFormat('yyyy-MM-dd').format(dateTime);
+    String path =
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/$resource/date/$date/${String.fromCharCodes(period.name.codeUnits.reversed)}.json";
+    Map<String, dynamic> bearerHeader = {
+      "Authorization": "Bearer $accessToken"
+    };
+
+    print(path);
 
     try {
       Response response = await _dio.get(
@@ -1178,12 +1323,17 @@ class FitbitAPIs {
     } catch (e) {}
   }
 
-  Future updateWaterLog(String accessToken, String userId) async {
+  Future getNutritionTimeSeriesByDateRange(String accessToken, String userId,
+      String resource, DateTime startDateTime, DateTime endDateTime) async {
+    String startDate = DateFormat('yyyy-MM-dd').format(startDateTime);
+    String endDate = DateFormat('yyyy-MM-dd').format(endDateTime);
     String path =
-        "${FitbitStrings.apiBaseUrl}/1.1/user/${userId != "" ? userId : "-"}/leaderboard/friends.json";
+        "${FitbitStrings.apiBaseUrl}/1/user/${userId != "" ? userId : "-"}/foods/log/$resource/date/$startDate/$endDate.json";
     Map<String, dynamic> bearerHeader = {
       "Authorization": "Bearer $accessToken"
     };
+
+    print(path);
 
     try {
       Response response = await _dio.get(
